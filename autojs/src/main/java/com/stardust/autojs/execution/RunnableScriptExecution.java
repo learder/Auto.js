@@ -8,12 +8,13 @@ import com.stardust.autojs.runtime.exception.ScriptInterruptedException;
 import com.stardust.autojs.script.ScriptSource;
 import com.stardust.lang.ThreadCompat;
 
+import org.mozilla.javascript.ContinuationPending;
+
 /**
  * Created by Stardust on 2017/5/1.
  */
 
 public class RunnableScriptExecution extends ScriptExecution.AbstractScriptExecution implements Runnable {
-
 
     private static final String TAG = "RunnableJSExecution";
     private ScriptEngine mScriptEngine;
@@ -32,7 +33,7 @@ public class RunnableScriptExecution extends ScriptExecution.AbstractScriptExecu
 
     public Object execute() {
         mScriptEngine = mScriptEngineManager.createEngineOfSourceOrThrow(getSource(), getId());
-        mScriptEngine.setTag(ExecutionConfig.TAG, getConfig());
+        mScriptEngine.setTag(ExecutionConfig.getTag(), getConfig());
         return execute(mScriptEngine);
     }
 
@@ -62,8 +63,8 @@ public class RunnableScriptExecution extends ScriptExecution.AbstractScriptExecu
     }
 
     private void prepare(ScriptEngine engine) {
-        engine.setTag(ScriptEngine.TAG_EXECUTE_PATH, getConfig().getExecutePath());
-        engine.setTag(ScriptEngine.TAG_ENV_PATH, getConfig().getRequirePath());
+        engine.setTag(ScriptEngine.TAG_WORKING_DIRECTORY, getConfig().getWorkingDirectory());
+        engine.setTag(ScriptEngine.TAG_ENV_PATH, getConfig().getPath());
         engine.init();
     }
 
@@ -71,12 +72,12 @@ public class RunnableScriptExecution extends ScriptExecution.AbstractScriptExecu
         engine.setTag(ScriptEngine.TAG_SOURCE, getSource());
         getListener().onStart(this);
         Object result = null;
-        long delay = getConfig().delay;
-        int times = getConfig().loopTimes;
+        long delay = getConfig().getDelay();
+        int times = getConfig().getLoopTimes();
         if (times == 0) {
             times = Integer.MAX_VALUE;
         }
-        long interval = getConfig().interval;
+        long interval = getConfig().getInterval();
         sleep(delay);
         ScriptSource source = getSource();
         for (int i = 0; i < times; i++) {

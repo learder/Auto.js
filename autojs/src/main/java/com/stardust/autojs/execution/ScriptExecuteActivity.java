@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -21,10 +21,9 @@ import com.stardust.autojs.engine.LoopBasedJavaScriptEngine;
 import com.stardust.autojs.engine.ScriptEngine;
 import com.stardust.autojs.engine.ScriptEngineManager;
 import com.stardust.autojs.runtime.ScriptRuntime;
-import com.stardust.autojs.runtime.api.UI;
 import com.stardust.autojs.script.ScriptSource;
 
-import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.ContinuationPending;
 
 /**
  * Created by Stardust on 2017/2/5.
@@ -87,6 +86,8 @@ public class ScriptExecuteActivity extends AppCompatActivity {
         try {
             prepare();
             doExecution();
+        } catch (ContinuationPending pending) {
+            pending.printStackTrace();
         } catch (Exception e) {
             onException(e);
         }
@@ -117,8 +118,8 @@ public class ScriptExecuteActivity extends AppCompatActivity {
     private void prepare() {
         mScriptEngine.put("activity", this);
         mScriptEngine.setTag("activity", this);
-        mScriptEngine.setTag(ScriptEngine.TAG_ENV_PATH, mScriptExecution.getConfig().getRequirePath());
-        mScriptEngine.setTag(ScriptEngine.TAG_EXECUTE_PATH, mScriptExecution.getConfig().getExecutePath());
+        mScriptEngine.setTag(ScriptEngine.TAG_ENV_PATH, mScriptExecution.getConfig().getPath());
+        mScriptEngine.setTag(ScriptEngine.TAG_WORKING_DIRECTORY, mScriptExecution.getConfig().getWorkingDirectory());
         mScriptEngine.init();
     }
 
@@ -247,7 +248,7 @@ public class ScriptExecuteActivity extends AppCompatActivity {
                 mScriptEngine.forceStop();
             }
             mScriptEngine = mScriptEngineManager.createEngineOfSourceOrThrow(getSource(), getId());
-            mScriptEngine.setTag(ExecutionConfig.TAG, getConfig());
+            mScriptEngine.setTag(ExecutionConfig.getTag(), getConfig());
             return mScriptEngine;
         }
 

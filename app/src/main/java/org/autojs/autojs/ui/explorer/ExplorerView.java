@@ -3,13 +3,13 @@ package org.autojs.autojs.ui.explorer;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -339,11 +339,11 @@ public class ExplorerView extends ThemeColorSwipeRefreshLayout implements SwipeR
                         .createShortcut(mSelectedItem.toScriptFile());
                 break;
             case R.id.open_by_other_apps:
-                Scripts.openByOtherApps(mSelectedItem.toScriptFile());
+                Scripts.INSTANCE.openByOtherApps(mSelectedItem.toScriptFile());
                 notifyOperated();
                 break;
             case R.id.send:
-                Scripts.send(mSelectedItem.toScriptFile());
+                Scripts.INSTANCE.send(mSelectedItem.toScriptFile());
                 notifyOperated();
                 break;
             case R.id.timed_task:
@@ -551,13 +551,13 @@ public class ExplorerView extends ThemeColorSwipeRefreshLayout implements SwipeR
 
         @OnClick(R.id.run)
         void run() {
-            Scripts.run(new ScriptFile(mExplorerItem.getPath()));
+            Scripts.INSTANCE.run(new ScriptFile(mExplorerItem.getPath()));
             notifyOperated();
         }
 
         @OnClick(R.id.edit)
         void edit() {
-            Scripts.edit(new ScriptFile(mExplorerItem.getPath()));
+            Scripts.INSTANCE.edit(getContext(), new ScriptFile(mExplorerItem.getPath()));
             notifyOperated();
         }
 

@@ -2,7 +2,7 @@ package com.stardust.autojs.core.image;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.stardust.autojs.core.opencv.MatOfPoint;
 import com.stardust.autojs.core.opencv.OpenCVHelper;
@@ -56,6 +56,7 @@ public class ColorFinder {
     }
 
     public Point[] findAllPointsForColor(ImageWrapper image, int color, int threshold, Rect rect) {
+
         MatOfPoint matOfPoint = findColorInner(image, color, threshold, rect);
         if (matOfPoint == null) {
             return new Point[0];

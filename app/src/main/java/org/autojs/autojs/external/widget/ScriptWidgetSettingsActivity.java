@@ -4,7 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -42,7 +42,7 @@ public class ScriptWidgetSettingsActivity extends BaseActivity {
 
 
     private void initScriptListRecyclerView() {
-        mExplorer = new Explorer(new ExplorerFileProvider(Scripts.FILE_FILTER), 0);
+        mExplorer = new Explorer(new ExplorerFileProvider(Scripts.INSTANCE.getFILE_FILTER()), 0);
         ExplorerView explorerView = findViewById(R.id.script_list);
         explorerView.setExplorer(mExplorer, ExplorerDirPage.createRoot(Environment.getExternalStorageDirectory()));
         explorerView.setOnItemClickListener((view, file) -> {

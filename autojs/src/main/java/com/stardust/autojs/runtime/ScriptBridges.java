@@ -7,7 +7,6 @@ package com.stardust.autojs.runtime;
 public class ScriptBridges {
 
 
-
     public interface Bridges {
 
         Object[] NO_ARGUMENTS = new Object[0];
@@ -25,6 +24,10 @@ public class ScriptBridges {
 
     public void setBridges(Bridges bridges) {
         mBridges = bridges;
+    }
+
+    public Bridges getBridges() {
+        return mBridges;
     }
 
     public Object callFunction(Object func, Object target, Object args) {
